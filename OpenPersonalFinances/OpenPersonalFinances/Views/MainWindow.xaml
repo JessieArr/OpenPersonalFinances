@@ -1,0 +1,35 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:OpenPersonalFinances.ViewModels;assembly=OpenPersonalFinances"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="OpenPersonalFinances.Views.MainWindow"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="OpenPersonalFinances">
+    <Design.DataContext>
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
+  <DockPanel>
+    <Design.DataContext>
+      <vm:MainWindowViewModel/>
+    </Design.DataContext>
+
+    <Menu DockPanel.Dock="Top">
+      <MenuItem Header="_File">
+        <MenuItem Header="_Open..." Command="{Binding OpenFile}"/>
+        <Separator/>
+        <MenuItem Header="_Exit" Command="{Binding Exit}"/>
+      </MenuItem>
+    </Menu>
+    <ScrollViewer>
+      <ItemsControl x:Name="MyItems" Items="{Binding Items}">
+        <ItemsControl.ItemTemplate>
+          <DataTemplate>
+            <TextBox Text="{Binding Text}"></TextBox>
+          </DataTemplate>
+        </ItemsControl.ItemTemplate>
+      </ItemsControl>
+    </ScrollViewer>
+  </DockPanel>
+</Window>
