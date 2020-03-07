@@ -13,8 +13,41 @@
     <AvaloniaResource Include="Assets\**" />
   </ItemGroup>
   <ItemGroup>
+    <AvaloniaResource Remove="Views\MainView.xaml" />
+    <AvaloniaResource Remove="Views\ProjectMainView.xaml" />
+    <AvaloniaResource Remove="Views\WelcomeView.xaml" />
+    <AvaloniaResource Remove="Windows\NewProjectDialog.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Views\MainView.xaml" />
+    <None Remove="Views\ProjectMainView.xaml" />
+    <None Remove="Views\WelcomeView.xaml" />
+    <None Remove="Windows\NewProjectDialog.xaml" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Avalonia" Version="0.9.0" />
     <PackageReference Include="Avalonia.Desktop" Version="0.9.0" />
     <PackageReference Include="Avalonia.ReactiveUI" Version="0.9.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Windows\NewProjectDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\ProjectMainView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\WelcomeView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\MainView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
   </ItemGroup>
 </Project>

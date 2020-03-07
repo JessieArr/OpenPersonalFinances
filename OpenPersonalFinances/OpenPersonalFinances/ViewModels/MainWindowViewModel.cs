@@ -1,5 +1,9 @@
 ﻿using Avalonia.Controls;
+using Newtonsoft.Json;
 using OpenPersonalFinances.Models;
+using OpenPersonalFinances.Services;
+using OpenPersonalFinances.Windows;
+using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -12,18 +16,22 @@ namespace OpenPersonalFinances.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        public ObservableCollection<RowItem> Items { get; set; } = new ObservableCollection<RowItem>()
+        public async Task NewProject()
         {
-            new RowItem("One"),
-            new RowItem("Two"),
-            new RowItem("Three"),
-            new RowItem("Four"),
-        };
+            var dialog = new OpenFolderDialog();
+            var result = await dialog.ShowAsync(new Window());
+
+            if (!String.IsNullOrEmpty(result))
+            {
+                var window = new NewProjectDialog(result);
+                window.Show();
+            }
+        }
 
         public async Task OpenFile()
         {
             var dialog = new OpenFileDialog();
-            dialog.Filters.Add(new FileDialogFilter() { Name = "CSV Files", Extensions = { "csv" } });
+            dialog.Filters.Add(new FileDialogFilter() { Name = "Open Personal Finance Projects", Extensions = { "opfi" } });
 
             var result = await dialog.ShowAsync(new Window());
 
@@ -31,12 +39,7 @@ namespace OpenPersonalFinances.ViewModels
             {
                 var filePath = result.First();
                 var fileContents = File.ReadAllText(filePath);
-                var rows = fileContents.Split('\n');
-                Items.Clear();
-                foreach (var row in rows)
-                {
-                    Items.Add(new RowItem(row));
-                }
+                CurrentProjectService.ActiveProject = JsonConvert.DeserializeObject<OPFProject>(fileContents);
             }
         }
 
