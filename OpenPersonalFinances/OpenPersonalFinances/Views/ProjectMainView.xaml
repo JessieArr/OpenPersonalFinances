@@ -4,5 +4,17 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="OpenPersonalFinances.Views.ProjectMainView">
-    Project Opened!
+  <ScrollViewer>
+    <StackPanel>
+      <Button Command="{Binding CreateAccount}">Add New Account</Button>
+      <ItemsControl x:Name="MyItems" Items="{Binding Project.Accounts}">
+        <ItemsControl.ItemTemplate>
+          <DataTemplate>
+            <TextBox Text="Account"></TextBox>
+          </DataTemplate>
+        </ItemsControl.ItemTemplate>
+      </ItemsControl>
+    </StackPanel>
+    
+  </ScrollViewer>
 </UserControl>

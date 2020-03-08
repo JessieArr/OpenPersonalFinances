@@ -25,7 +25,9 @@ namespace OpenPersonalFinances.ViewModels
         {
             CurrentProjectService.ActiveProject = new OPFProject();
             var projectText = JsonConvert.SerializeObject(CurrentProjectService.ActiveProject);
-            File.WriteAllText(Path.Join(_FolderPath, NewProjectName), projectText);
+            var filePath = Path.Join(_FolderPath, NewProjectName);
+            File.WriteAllText(filePath, projectText);
+            CurrentProjectService.ActiveProjectPath = filePath;
             _ParentWindow.Close();
         }
     }

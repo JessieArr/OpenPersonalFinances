@@ -19,6 +19,8 @@ namespace OpenPersonalFinances.Services
                 ActiveProjectChanged(null, value);
             }
         }
+
         public static event EventHandler<OPFProject> ActiveProjectChanged;
+        public static string ActiveProjectPath { get; set; }
     }
 }

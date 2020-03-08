@@ -28,6 +28,12 @@ namespace OpenPersonalFinances.ViewModels
             }
         }
 
+        public async Task SaveProject()
+        {
+            var serializedProject = JsonConvert.SerializeObject(CurrentProjectService.ActiveProject);
+            File.WriteAllText(CurrentProjectService.ActiveProjectPath, serializedProject);
+        }
+
         public async Task OpenFile()
         {
             var dialog = new OpenFileDialog();
@@ -40,6 +46,7 @@ namespace OpenPersonalFinances.ViewModels
                 var filePath = result.First();
                 var fileContents = File.ReadAllText(filePath);
                 CurrentProjectService.ActiveProject = JsonConvert.DeserializeObject<OPFProject>(fileContents);
+                CurrentProjectService.ActiveProjectPath = filePath;
             }
         }
 

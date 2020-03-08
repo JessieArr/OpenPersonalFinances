@@ -24,7 +24,7 @@ namespace OpenPersonalFinances.ViewModels
 
         private void ActiveProjectChangedHandler(object sender, OPFProject e)
         {
-            Content = new ProjectMainViewModel();
+            Content = new ProjectMainViewModel(CurrentProjectService.ActiveProject);
         }
     }
 }
