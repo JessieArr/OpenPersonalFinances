@@ -7,14 +7,49 @@
   <ScrollViewer>
     <StackPanel>
       <Button Command="{Binding CreateAccount}">Add New Account</Button>
-      <ItemsControl x:Name="MyItems" Items="{Binding Project.Accounts}">
-        <ItemsControl.ItemTemplate>
-          <DataTemplate>
-            <TextBox Text="Account"></TextBox>
-          </DataTemplate>
-        </ItemsControl.ItemTemplate>
-      </ItemsControl>
-    </StackPanel>
-    
+      <StackPanel Orientation="Horizontal">
+        <StackPanel>
+          <Button>All Accounts</Button>
+          <ItemsControl Items="{Binding Project.Accounts}">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate>
+                <Button Content="{Binding Name}" Command="{Binding SelectAccount}"></Button>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+        </StackPanel>
+        <StackPanel>
+          <StackPanel Orientation="Horizontal">
+            <Button Command="{Binding ImportRecords}">Import</Button>
+            <TextBox Text="{Binding FilterText}" Width="200"></TextBox>
+            <Button Command="{Binding FilterRecords}">Filter</Button>
+          </StackPanel>
+          <DataGrid Items="{Binding List}" Width="700">
+            <DataGrid.Columns>
+              <DataGridTextColumn Header="Date"
+                                  Binding="{Binding Date}"
+                                  Width="*" />
+              <DataGridTextColumn Header="Description"
+                                  Binding="{Binding Description}"
+                                  Width="*" />
+              <DataGridTextColumn Header="Category"
+                                  Binding="{Binding Category}"
+                                  Width="*" />
+              <DataGridTextColumn Header="Amount"
+                                  Binding="{Binding Amount}"
+                                  Width="*" />
+            </DataGrid.Columns>
+          </DataGrid>
+          <!--<ItemsControl Items="{Binding List}">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate>
+                <TextBlock Text="{Binding Text}"></TextBlock>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>-->
+        </StackPanel>
+        <ContentControl Content="{Binding MainContent}"></ContentControl>
+      </StackPanel>      
+    </StackPanel>    
   </ScrollViewer>
 </UserControl>
