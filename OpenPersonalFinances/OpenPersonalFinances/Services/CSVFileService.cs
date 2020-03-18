@@ -80,5 +80,48 @@ namespace OpenPersonalFinances.Services
 
             return returnValue;
         }
+
+        public List<AccountRecord> GetRecordsForCSVFile(CSVFile file, CSVFileColumnOptions columnOptions, int accountId)
+        {
+            var splitHeaders = file.Header.Split(',');
+            var dateColumn = 0;
+            var amountColumns = new List<int>();
+            var categoryColumn = 0;
+            var descriptionColumn = 0;
+            for(var i = 0; i < splitHeaders.Length; i++)
+            {
+                if(String.Equals(splitHeaders[i], columnOptions.DateColumn, StringComparison.OrdinalIgnoreCase))
+                {
+                    dateColumn = i;
+                }
+                if (columnOptions.AmountColumns.Any(x => String.Equals(splitHeaders[i], x, StringComparison.OrdinalIgnoreCase)))
+                {
+                    amountColumns.Add(i);
+                }
+                if (String.Equals(splitHeaders[i], columnOptions.CategoryColumn, StringComparison.OrdinalIgnoreCase))
+                {
+                    categoryColumn = i;
+                }
+                if (String.Equals(splitHeaders[i], columnOptions.DescriptionColumn, StringComparison.OrdinalIgnoreCase))
+                {
+                    descriptionColumn = i;
+                }
+            }
+
+            var records = new List<AccountRecord>();
+            foreach(var row in file.Rows)
+            {
+                var splitRow = row.Split(',');
+                var newRecord = new AccountRecord();
+                newRecord.AccountID = accountId;
+                newRecord.Date = DateTime.Parse(splitRow[dateColumn]);
+                newRecord.Amount = float.Parse(splitRow[amountColumns.First()]);
+                newRecord.Category = splitRow[categoryColumn];
+                newRecord.Description = splitRow[descriptionColumn];
+                records.Add(newRecord);
+            }
+
+            return records;
+        }
     }
 }

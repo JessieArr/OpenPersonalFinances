@@ -26,5 +26,26 @@ namespace OpenPersonalFinances.Test.UnitTests
             };
             SUT.GetColumnSuggestionsForCSV(testCsv);
         }
+
+        [Fact]
+        public void GetRecordsForCSVFile_DoesNotThrow()
+        {
+            var testCsv = new CSVFile();
+            testCsv.Header = "Transaction Date,Post Date,Description,Category,Type,Amount";
+            testCsv.Rows = new List<string>()
+            {
+                "01/01/2020,01/02/2020,WALMART GROCERY,Groceries,Sale,-12.34"
+            };
+
+            var testColumnOptions = new CSVFileColumnOptions()
+            {
+                DateColumn = "Transaction Date",
+                AmountColumns = new List<string>() { "Amount" },
+                CategoryColumn = "Category",
+                DescriptionColumn = "Description",
+            };
+
+            var result = SUT.GetRecordsForCSVFile(testCsv, testColumnOptions, 13);
+        }
     }
 }

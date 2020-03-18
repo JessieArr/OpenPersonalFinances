@@ -11,6 +11,9 @@ namespace OpenPersonalFinances.ViewModels
     public class ImportCSVDialogViewModel
     {
         private Window _ParentWindow;
+        private CSVFileService _csvFileService;
+        private CSVFile _csvFile;
+
         public string Headers { get; set; }
         public List<string> PreviewItems { get; set; } = new List<string>()
         {
@@ -29,10 +32,12 @@ namespace OpenPersonalFinances.ViewModels
         public ImportCSVDialogViewModel(Window parentWindow, CSVFile file)
         {
             _ParentWindow = parentWindow;
+            _csvFileService = new CSVFileService();
+            _csvFile = file;
+
             Headers = file.Header;
             PreviewItems = file.Rows.Take(10).ToList();
-            var service = new CSVFileService();
-            var columnSuggestions = service.GetColumnSuggestionsForCSV(file);
+            var columnSuggestions = _csvFileService.GetColumnSuggestionsForCSV(file);
             AmountColumns = columnSuggestions.AmountColumns;
             DateColumns = columnSuggestions.DateColumns;
             StringColumns = columnSuggestions.StringColumns;
@@ -40,6 +45,20 @@ namespace OpenPersonalFinances.ViewModels
 
         public void ImportCommand()
         {
+            var columnOptions = new CSVFileColumnOptions()
+            {
+                DateColumn = DateColumn,
+                AmountColumns = new List<string>()
+                {
+                    AmountColumn
+                },
+                CategoryColumn = CategoryColumn,
+                DescriptionColumn = DescriptionColumn
+            };
+
+            var newRecords = _csvFileService.GetRecordsForCSVFile(_csvFile, columnOptions, 0);
+            var duplicateCount = CurrentProjectService.ActiveProject.AddRecordsExceptDuplicates(newRecords);
+
             _ParentWindow.Close();
         }
     }
