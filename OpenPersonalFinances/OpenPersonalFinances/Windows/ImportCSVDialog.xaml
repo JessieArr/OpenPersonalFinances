@@ -1,0 +1,36 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="OpenPersonalFinances.Windows.ImportCSVDialog"
+        Title="ImportCSVDialog">
+  <StackPanel>
+    <TextBlock Text="Preview:"></TextBlock>
+    <TextBlock Text="{Binding Headers}"></TextBlock>
+    <ItemsControl Items="{Binding PreviewItems}">
+      <ItemsControl.ItemTemplate>
+        <DataTemplate>
+          <TextBlock Text="{Binding}"></TextBlock>
+        </DataTemplate>
+      </ItemsControl.ItemTemplate>
+    </ItemsControl>
+    <StackPanel Orientation="Horizontal">
+      <TextBlock Text="Date Column:"></TextBlock>
+      <ComboBox Items="{Binding DateColumns}" SelectedItem="{Binding DateColumn}"></ComboBox>
+    </StackPanel>    
+    <StackPanel Orientation="Horizontal">
+      <TextBlock Text="Amount Column:"></TextBlock>
+      <ComboBox Items="{Binding AmountColumns}" SelectedItem="{Binding AmountColumn}"></ComboBox>
+    </StackPanel>
+    <StackPanel Orientation="Horizontal">
+      <TextBlock Text="Description Column:"></TextBlock>
+      <ComboBox Items="{Binding StringColumns}" SelectedItem="{Binding DescriptionColumn}"></ComboBox>
+    </StackPanel>
+    <StackPanel Orientation="Horizontal">
+      <TextBlock Text="Category Column:"></TextBlock>
+      <ComboBox Items="{Binding StringColumns}" SelectedItem="{Binding CategoryColumn}"></ComboBox>
+    </StackPanel>
+    <Button Command="{Binding ImportCommand}">Import</Button>
+  </StackPanel>
+</Window>

@@ -24,7 +24,7 @@ namespace OpenPersonalFinances.Test.UnitTests
             {
                 "01/01/2020,01/02/2020,WALMART GROCERY,Groceries,Sale,-12.34"
             };
-            SUT.GetColumnConfigForCSV(testCsv);
+            SUT.GetColumnSuggestionsForCSV(testCsv);
         }
     }
 }

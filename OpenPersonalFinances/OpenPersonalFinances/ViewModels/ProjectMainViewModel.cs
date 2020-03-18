@@ -17,7 +17,7 @@ namespace OpenPersonalFinances.ViewModels
     {
         public OPFProject Project { get; set; }
         public string FilterText { get; set; }
-        public ObservableCollection<ListRecord> List { get; set; } = new ObservableCollection<ListRecord>();
+        public ObservableCollection<AccountRecord> List { get; set; } = new ObservableCollection<AccountRecord>();
         ViewModelBase content;
 
         public ViewModelBase Content
@@ -28,7 +28,7 @@ namespace OpenPersonalFinances.ViewModels
 
         public ProjectMainViewModel(OPFProject project)
         {
-            Project = project;            
+            Project = project;
             CurrentProjectService.ActiveAccountChanged += ActiveAccountChanged;
             UpdateListContents();
         }
@@ -53,10 +53,10 @@ namespace OpenPersonalFinances.ViewModels
             if (result.Any())
             {
                 var filePath = result.First();
-                var fileContents = File.ReadAllText(filePath);
-                var values = fileContents.Split('\n');
-                CurrentProjectService.ActiveAccount.Records = values.ToList();
-                UpdateListContents();
+                var service = new CSVFileService();
+                var csvFile = service.OpenCSVFile(filePath);
+                var newWindow = new ImportCSVDialog(csvFile);
+                newWindow.Show();
             }
         }
 
@@ -68,42 +68,15 @@ namespace OpenPersonalFinances.ViewModels
         private void UpdateListContents()
         {
             List.Clear();
-            if(CurrentProjectService.ActiveAccount == null)
+            var filteredRecords = CurrentProjectService.ActiveProject.Transactions;
+            if (!String.IsNullOrEmpty(FilterText))
             {
-                foreach (var account in Project.Accounts)
-                {
-                    var filteredRecords = account.Records.Skip(1);
-                    if(!String.IsNullOrEmpty(FilterText))
-                    {
-                        filteredRecords = filteredRecords.Where(x => x.Contains(FilterText, StringComparison.OrdinalIgnoreCase)).ToList();
-                    }
-                    foreach (var record in filteredRecords)
-                    {
-                        if(String.IsNullOrEmpty(record))
-                        {
-                            continue;
-                        }
-                        List.Add(new ListRecord(record));
-                    }
-                }
+                filteredRecords = filteredRecords.Where(x => x.Description.Contains(FilterText, StringComparison.OrdinalIgnoreCase)).ToList();
             }
-            else
+            foreach (var record in filteredRecords)
             {
-                var filteredRecords = CurrentProjectService.ActiveAccount.Records.Skip(1);
-                if (!String.IsNullOrEmpty(FilterText))
-                {
-                    filteredRecords = filteredRecords.Where(x => x.Contains(FilterText, StringComparison.OrdinalIgnoreCase)).ToList();
-                }
-                foreach (var record in filteredRecords)
-                {
-                    if (String.IsNullOrEmpty(record))
-                    {
-                        continue;
-                    }
-                    List.Add(new ListRecord(record));
-                }
+                List.Add(record);
             }
-            
         }
     }
 }

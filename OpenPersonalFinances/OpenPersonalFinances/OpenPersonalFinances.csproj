@@ -16,6 +16,7 @@
     <AvaloniaResource Remove="Views\MainView.xaml" />
     <AvaloniaResource Remove="Views\ProjectMainView.xaml" />
     <AvaloniaResource Remove="Views\WelcomeView.xaml" />
+    <AvaloniaResource Remove="Windows\ImportCSVDialog.xaml" />
     <AvaloniaResource Remove="Windows\NewAccountDialog.xaml" />
     <AvaloniaResource Remove="Windows\NewProjectDialog.xaml" />
   </ItemGroup>
@@ -23,6 +24,7 @@
     <None Remove="Views\MainView.xaml" />
     <None Remove="Views\ProjectMainView.xaml" />
     <None Remove="Views\WelcomeView.xaml" />
+    <None Remove="Windows\ImportCSVDialog.xaml" />
     <None Remove="Windows\NewAccountDialog.xaml" />
     <None Remove="Windows\NewProjectDialog.xaml" />
   </ItemGroup>
@@ -55,6 +57,11 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Windows\NewAccountDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Windows\ImportCSVDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
   </ItemGroup>

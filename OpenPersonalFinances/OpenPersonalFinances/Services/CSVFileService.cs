@@ -30,7 +30,7 @@ namespace OpenPersonalFinances.Services
             return returnValue;
         }
 
-        public CSVFileColumnConfig GetColumnConfigForCSV(CSVFile file)
+        public CSVFileColumnSuggestions GetColumnSuggestionsForCSV(CSVFile file)
         {
             var headers = file.Header;
             var splitHeaders = headers.Split(',');
@@ -54,7 +54,7 @@ namespace OpenPersonalFinances.Services
                 }
             }
 
-            var returnValue = new CSVFileColumnConfig();
+            var returnValue = new CSVFileColumnSuggestions();
             var possibleDateColumns = new List<string>();
             var possibleCategoryColumns = new List<string>();
             var possibleDescriptionColumns = new List<string>();
@@ -64,51 +64,18 @@ namespace OpenPersonalFinances.Services
                 var date = DateTime.Now;
                 if(column.Value.All(x => DateTime.TryParse(x, out date)))
                 {
-                    possibleDateColumns.Add(column.Key);
+                    returnValue.DateColumns.Add(column.Key);
+                    continue;
                 }                
 
                 var myFloat = 0.1f;
                 if (column.Value.All(x => String.IsNullOrEmpty(x) || float.TryParse(x, out myFloat)))
                 {
-                    returnValue.AmountColumns.Add(column.Key, false);
+                    returnValue.AmountColumns.Add(column.Key);
+                    continue;
                 }
 
-                if (String.Equals(column.Key, "category", StringComparison.OrdinalIgnoreCase))
-                {
-                    possibleCategoryColumns.Add(column.Key);
-                }
-
-                if (String.Equals(column.Key, "description", StringComparison.OrdinalIgnoreCase))
-                {
-                    possibleDescriptionColumns.Add(column.Key);
-                }
-            }
-
-            if(possibleDateColumns.Count == 1)
-            {
-                returnValue.DateColumn = possibleDateColumns.First();
-            }
-            else
-            {
-                // Figure this out
-            }
-
-            if(possibleCategoryColumns.Count == 1)
-            {
-                returnValue.CategoryColumn = possibleCategoryColumns.First();
-            }
-            else
-            {
-                // Figure this out
-            }
-
-            if (possibleDescriptionColumns.Count == 1)
-            {
-                returnValue.DescriptionColumn = possibleDescriptionColumns.First();
-            }
-            else
-            {
-                // Figure this out
+                returnValue.StringColumns.Add(column.Key);
             }
 
             return returnValue;
