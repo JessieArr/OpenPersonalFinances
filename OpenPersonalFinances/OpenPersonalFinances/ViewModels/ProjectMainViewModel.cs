@@ -73,7 +73,7 @@ namespace OpenPersonalFinances.ViewModels
             {
                 filteredRecords = filteredRecords.Where(x => x.Description.Contains(FilterText, StringComparison.OrdinalIgnoreCase)).ToList();
             }
-
+            filteredRecords = filteredRecords.OrderByDescending(x => x.Date).Take(100).ToList();
             foreach (var record in filteredRecords)
             {
                 List.Add(record);

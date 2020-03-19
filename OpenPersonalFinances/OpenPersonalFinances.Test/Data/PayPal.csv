@@ -1,0 +1,3 @@
+"Date","Time","Time Zone","Description","Currency","Gross","Fee","Net","Balance","Transaction ID","From Email Address","Name","Bank Name","Bank Account","Shipping and Handling Amount","Sales Tax","Invoice ID","Reference Txn ID"
+"1/1/2020","20:27:07","America/Los_Angeles","Mobile Payment","USD","100.00","-14.80","85.20","123.45","8AB1234ASDF","fake.email@madeup.com","Peter Griffin","","","0.00","0.00","",""
+"1/2/2020","10:40:56","America/Los_Angeles","PreApproved Payment Bill User Payment","USD","-7.00","0.00","-7.00","123.45","9ASDF456ABC","ar@github.com","GitHub, Inc.","","","0.00","0.00","P-123456789","B-ABC1234ABC234567"

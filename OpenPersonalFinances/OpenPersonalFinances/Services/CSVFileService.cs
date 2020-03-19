@@ -33,7 +33,7 @@ namespace OpenPersonalFinances.Services
         public CSVFileColumnSuggestions GetColumnSuggestionsForCSV(CSVFile file)
         {
             var headers = file.Header;
-            var splitHeaders = headers.Split(',');
+            var splitHeaders = SplitCSVRow(headers);
             var rows = file.Rows;
             var columnData = new Dictionary<string, List<string>>();
             foreach(var header in splitHeaders)
@@ -42,13 +42,13 @@ namespace OpenPersonalFinances.Services
             }
             foreach(var row in rows)
             {
-                var splitRow = row.Split(',');
-                if(splitHeaders.Length != splitRow.Length)
+                var splitRow = SplitCSVRow(row);
+                if(splitHeaders.Count != splitRow.Count)
                 {
                     throw new Exception("CSV data was malformed");
                 }
                 var rowDictionary = new Dictionary<string, string>();
-                for(var i = 0; i < splitHeaders.Length; i++)
+                for(var i = 0; i < splitHeaders.Count; i++)
                 {
                     columnData[splitHeaders[i]].Add(splitRow[i]);
                 }
@@ -83,12 +83,12 @@ namespace OpenPersonalFinances.Services
 
         public List<AccountRecord> GetRecordsForCSVFile(CSVFile file, CSVFileColumnOptions columnOptions, int accountId)
         {
-            var splitHeaders = file.Header.Split(',');
+            var splitHeaders = SplitCSVRow(file.Header);
             var dateColumn = 0;
             var amountColumns = new List<int>();
             var categoryColumn = 0;
             var descriptionColumn = 0;
-            for(var i = 0; i < splitHeaders.Length; i++)
+            for(var i = 0; i < splitHeaders.Count; i++)
             {
                 if(String.Equals(splitHeaders[i], columnOptions.DateColumn, StringComparison.OrdinalIgnoreCase))
                 {
@@ -111,7 +111,7 @@ namespace OpenPersonalFinances.Services
             var records = new List<AccountRecord>();
             foreach(var row in file.Rows)
             {
-                var splitRow = row.Split(',');
+                var splitRow = SplitCSVRow(row);
                 var newRecord = new AccountRecord();
                 newRecord.AccountID = accountId;
                 newRecord.Date = DateTime.Parse(splitRow[dateColumn]);
@@ -122,6 +122,34 @@ namespace OpenPersonalFinances.Services
             }
 
             return records;
+        }
+
+        public List<string> SplitCSVRow(string row)
+        {
+            var result = new List<string>();
+            var segmentStartIndex = 0;
+            var isInQuoteBlock = false;
+            for (var i = 0; i < row.Length; i++)
+            {
+                if(row[i] == '"')
+                {
+                    isInQuoteBlock = !isInQuoteBlock;
+                }
+                if(row[i] == ',' && !isInQuoteBlock)
+                {
+                    result.Add(row.Substring(segmentStartIndex, i - segmentStartIndex));
+                    segmentStartIndex = i + 1;
+                }
+                if(i == row.Length - 1)
+                {
+                    result.Add(row.Substring(segmentStartIndex));
+                }
+            }
+            if (result.All(x => x.StartsWith("\"") && x.EndsWith("\"")))
+            {
+                result = result.Select(x => x.Substring(1, x.Length - 2)).ToList();
+            }
+            return result;
         }
     }
 }

@@ -10,6 +10,7 @@ namespace OpenPersonalFinances.Test.SystemTests
     {
         private static string _chaseFormatCSVFile = "./Data/chase.csv";
         private static string _payTrustFormatCSVFile = "./Data/PayTrust.csv";
+        private static string _payPalFormatCSVFile = "./Data/PayPal.csv";
 
         private CSVFileService SUT;
         public CSVFileServiceTests()
@@ -40,6 +41,7 @@ namespace OpenPersonalFinances.Test.SystemTests
             {
                 new object[] { _chaseFormatCSVFile, 2 },
                 new object[] { _payTrustFormatCSVFile, 2 },
+                new object[] { _payPalFormatCSVFile , 2},
             };
 
             return allData;

@@ -21,6 +21,9 @@
     <None Update="Data\chase.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Data\PayPal.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Data\PayTrust.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
