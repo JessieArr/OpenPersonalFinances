@@ -22,6 +22,14 @@
     <StackPanel Orientation="Horizontal">
       <TextBlock Text="Amount Column:"></TextBlock>
       <ComboBox Items="{Binding AmountColumns}" SelectedItem="{Binding AmountColumn}"></ComboBox>
+      <TextBlock Text="Invert?"></TextBlock>
+      <CheckBox IsChecked="{Binding AmountInverted}"></CheckBox>
+    </StackPanel>
+    <StackPanel Orientation="Horizontal">
+      <TextBlock Text="Secondary Amount Column:"></TextBlock>
+      <ComboBox Items="{Binding AmountColumns}" SelectedItem="{Binding SecondaryAmountColumn}"></ComboBox>
+      <TextBlock Text="Invert?"></TextBlock>
+      <CheckBox IsChecked="{Binding SecondaryAmountInverted}"></CheckBox>
     </StackPanel>
     <StackPanel Orientation="Horizontal">
       <TextBlock Text="Description Column:"></TextBlock>

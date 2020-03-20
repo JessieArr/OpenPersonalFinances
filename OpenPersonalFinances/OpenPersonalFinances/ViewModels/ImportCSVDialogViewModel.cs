@@ -26,6 +26,9 @@ namespace OpenPersonalFinances.ViewModels
         public List<string> StringColumns { get; set; } = new List<string>();
         public string DateColumn { get; set; }
         public string AmountColumn { get; set; }
+        public bool AmountColumnInverted { get; set; }
+        public string SecondaryAmountColumn { get; set; }
+        public bool SecondaryAmountColumnInverted { get; set; }
         public string DescriptionColumn { get; set; }
         public string CategoryColumn { get; set; }
 
@@ -48,13 +51,17 @@ namespace OpenPersonalFinances.ViewModels
             var columnOptions = new CSVFileColumnOptions()
             {
                 DateColumn = DateColumn,
-                AmountColumns = new List<string>()
-                {
-                    AmountColumn
-                },
                 CategoryColumn = CategoryColumn,
                 DescriptionColumn = DescriptionColumn
             };
+            if(!String.IsNullOrEmpty(AmountColumn))
+            {
+                columnOptions.AmountColumns.Add(AmountColumn, AmountColumnInverted);
+            }
+            if (!String.IsNullOrEmpty(SecondaryAmountColumn))
+            {
+                columnOptions.AmountColumns.Add(SecondaryAmountColumn, SecondaryAmountColumnInverted);
+            }
 
             var newRecords = _csvFileService.GetRecordsForCSVFile(_csvFile, columnOptions, 0);
             var duplicateCount = CurrentProjectService.ActiveProject.AddRecordsExceptDuplicates(newRecords);

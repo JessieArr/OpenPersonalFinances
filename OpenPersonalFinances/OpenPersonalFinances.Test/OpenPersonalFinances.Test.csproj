@@ -18,6 +18,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Data\GulfWinds.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Data\chase.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

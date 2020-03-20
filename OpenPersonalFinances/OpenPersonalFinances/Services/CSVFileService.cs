@@ -85,7 +85,7 @@ namespace OpenPersonalFinances.Services
         {
             var splitHeaders = SplitCSVRow(file.Header);
             var dateColumn = 0;
-            var amountColumns = new List<int>();
+            var amountColumns = new Dictionary<int, bool>();
             var categoryColumn = 0;
             var descriptionColumn = 0;
             for(var i = 0; i < splitHeaders.Count; i++)
@@ -93,11 +93,7 @@ namespace OpenPersonalFinances.Services
                 if(String.Equals(splitHeaders[i], columnOptions.DateColumn, StringComparison.OrdinalIgnoreCase))
                 {
                     dateColumn = i;
-                }
-                if (columnOptions.AmountColumns.Any(x => String.Equals(splitHeaders[i], x, StringComparison.OrdinalIgnoreCase)))
-                {
-                    amountColumns.Add(i);
-                }
+                }                
                 if (String.Equals(splitHeaders[i], columnOptions.CategoryColumn, StringComparison.OrdinalIgnoreCase))
                 {
                     categoryColumn = i;
@@ -105,6 +101,12 @@ namespace OpenPersonalFinances.Services
                 if (String.Equals(splitHeaders[i], columnOptions.DescriptionColumn, StringComparison.OrdinalIgnoreCase))
                 {
                     descriptionColumn = i;
+                }
+                
+                if (columnOptions.AmountColumns.Any(x => String.Equals(splitHeaders[i], x.Key, StringComparison.OrdinalIgnoreCase)))
+                {
+                    var matchingAmountColumn = columnOptions.AmountColumns.First(x => String.Equals(splitHeaders[i], x.Key, StringComparison.OrdinalIgnoreCase));
+                    amountColumns.Add(i, matchingAmountColumn.Value);
                 }
             }
 
@@ -115,9 +117,26 @@ namespace OpenPersonalFinances.Services
                 var newRecord = new AccountRecord();
                 newRecord.AccountID = accountId;
                 newRecord.Date = DateTime.Parse(splitRow[dateColumn]);
-                newRecord.Amount = float.Parse(splitRow[amountColumns.First()]);
                 newRecord.Category = splitRow[categoryColumn];
                 newRecord.Description = splitRow[descriptionColumn];
+
+                var finalValue = 0f;
+                foreach(var amountColumn in amountColumns)
+                {
+                    var amountString = splitRow[amountColumn.Key];
+                    if(String.IsNullOrEmpty(amountString))
+                    {
+                        continue;
+                    }
+                    var value = float.Parse(splitRow[amountColumn.Key]);
+                    if(amountColumn.Value)
+                    {
+                        value = value * -1;
+                    }
+                    finalValue += value;
+                }
+                newRecord.Amount = finalValue;
+
                 records.Add(newRecord);
             }
 

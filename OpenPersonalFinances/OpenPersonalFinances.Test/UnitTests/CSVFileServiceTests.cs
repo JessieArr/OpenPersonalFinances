@@ -2,6 +2,7 @@
 using OpenPersonalFinances.Services;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Xunit;
 
@@ -56,12 +57,41 @@ namespace OpenPersonalFinances.Test.UnitTests
             var testColumnOptions = new CSVFileColumnOptions()
             {
                 DateColumn = "Transaction Date",
-                AmountColumns = new List<string>() { "Amount" },
+                AmountColumns = new Dictionary<string, bool>(),
                 CategoryColumn = "Category",
                 DescriptionColumn = "Description",
             };
+            testColumnOptions.AmountColumns.Add("Amount", false);
 
             var result = SUT.GetRecordsForCSVFile(testCsv, testColumnOptions, 13);
+        }
+
+        [Fact]
+        public void GetRecordsForCSVFile_HandlesMultipleAmountColumns()
+        {
+            var testCsv = new CSVFile();
+            testCsv.Header = "Account Number,Post Date,Check,Description,Debit,Credit,Status,Balance";
+            testCsv.Rows = new List<string>()
+            {
+                "\"XXXX1234S2345\",1/1/2020,,\"ID: 1234567890 CO: SOMEBODY ACH Trace Number: 12345856433242\",100.00,,Posted,200.00",
+                "\"XXXX1234S2345\",1/1/2020,,\"ID: 2345678901 CO: SOMEBODY ELSE ACH Trace Number: 12456789765345\",,200.00,Posted,400.00"
+            };
+
+            var testColumnOptions = new CSVFileColumnOptions()
+            {
+                DateColumn = "Post Date",
+                AmountColumns = new Dictionary<string, bool>(),
+                CategoryColumn = "Description",
+                DescriptionColumn = "Description",
+            };
+            testColumnOptions.AmountColumns.Add("Credit", false);
+            testColumnOptions.AmountColumns.Add("Debit", true);
+
+            var result = SUT.GetRecordsForCSVFile(testCsv, testColumnOptions, 13);
+
+            Assert.Equal(2, result.Count);
+            Assert.Contains(result, x => x.Amount == -100);
+            Assert.Contains(result, x => x.Amount == 200);
         }
 
         [Fact]
